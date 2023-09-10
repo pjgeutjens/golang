@@ -58,6 +58,7 @@ func cloneMap[K comparable, V any](m map[K]V) map[K]V {
 	return result
 }
 
+// generics with custom constraints
 type addable interface {
 	int | float64 | string
 }
