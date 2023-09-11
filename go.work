@@ -1,0 +1,39 @@
+go 1.19
+
+use ./01_fundamentals/01_fundamentals
+
+use ./01_fundamentals/02_tour_of_go
+
+use ./01_fundamentals/03_simple_cli
+
+use ./01_fundamentals/04_simple_web_server
+
+use ./01_fundamentals/05_arrays_maps
+
+use ./01_fundamentals/06_structs
+
+use ./01_fundamentals/07_loops_and_branches
+
+use ./01_fundamentals/08_deferred_functions
+
+use ./01_fundamentals/09_panic_recover
+
+use ./01_fundamentals/10_functions
+
+use ./01_fundamentals/11_packages_comments
+
+use ./01_fundamentals/12_polymorphism
+
+use ./01_fundamentals/13_interfaces
+
+use ./01_fundamentals/14_generics
+
+use ./01_fundamentals/15_error_handling
+
+use ./01_fundamentals/16_concurrency
+
+use ./01_fundamentals/17_testing
+
+use ./02_dsa/01_binary_search
+
+use ./02_dsa/02_two_crystal_balls
