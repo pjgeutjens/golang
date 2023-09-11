@@ -21,4 +21,11 @@ func TestBinarySearch(t *testing.T) {
 			t.Error("Expected ", expected, " got ", result, "searching for ", needle)
 		}
 	}
+
+	for needle, expected := range test_cases {
+		result := RBinarySearch(haystack, needle)
+		if result != expected {
+			t.Error("Expected ", expected, " got ", result, "searching for ", needle)
+		}
+	}
 }
