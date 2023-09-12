@@ -34,7 +34,7 @@ func TestLinkedList(t *testing.T) {
 		t.Errorf("Expected error, got nil")
 	}
 	// Test GetAt error
-	if _, err := list.GetAt(5); err == nil {
+	if _, err := list.Get(5); err == nil {
 		t.Errorf("Expected error, got nil")
 	}
 }
