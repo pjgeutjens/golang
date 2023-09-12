@@ -7,12 +7,16 @@ import (
 )
 
 func TestTwoCrystalBalls(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())
-	idx := rand.Intn(10000)
-	data := make([]bool, 10000)
+	rand.Seed(time.Now().UnixNano() % 1000)
+	idx := rand.Intn(1000)
+	data := make([]bool, 1000)
+	empty := make([]bool, 1000)
 
-	for i := 0; i < idx; i++ {
+	for i := idx; i < len(data); i++ {
 		data[i] = true
+	}
+	for i := 0; i < len(empty); i++ {
+		empty[i] = false
 	}
 
 	result := TwoCrystalBalls(data)
@@ -20,7 +24,7 @@ func TestTwoCrystalBalls(t *testing.T) {
 		t.Errorf("TwoCrystalBalls(%d) = %d", idx, result)
 	}
 
-	result = TwoCrystalBalls(make([]bool, 881))
+	result = TwoCrystalBalls(empty)
 	if result != -1 {
 		t.Errorf("TwoCrystalBalls(%d) = %d", idx, result)
 	}
