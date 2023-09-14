@@ -41,3 +41,5 @@ use ./02_dsa/02_two_crystal_balls
 use ./02_dsa/03_bubble_sort
 
 use ./02_dsa/04_linked_list
+
+use ./03_advent_of_code/2021/01_sonar_sweep
