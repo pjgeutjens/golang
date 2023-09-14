@@ -29,7 +29,7 @@ func TestLinkedList(t *testing.T) {
 			t.Errorf("Expected Get(2) to return 3, got %v", val)
 		}
 	})
-	t.Run("RemoveAt", func(t *testing.T) {
+.Run("RemoveAt", func(t *testing.T) {
 		// Test
 		val, err := list.RemoveAt(1)
 		if err != nil {
