@@ -60,19 +60,27 @@ func (list *LinkedList) RemoveAt(idx int) (int, error) {
 }
 
 func (list *LinkedList) InsertAt(idx int, value int) error {
+	node := &Node{value: value}
 	l := list.Length()
 	if idx > l {
 		return fmt.Errorf("idx out of bounds")
 	}
 	n := list.head
-	for i := 0; i < idx; i++ {
+	if idx == 0 {
+		node.next = list.head
+		list.head = node
+		return nil
+	}
+
+	for i := 0; i < idx-1; i++ {
 		if n.next == nil {
 			return fmt.Errorf("idx out of bounds")
 		}
 		n = n.next
 	}
-	newNode := Node{value: value, next: n.next}
-	n.next = &newNode
+
+	node.next = n.next
+	n.next = node
 	return nil
 }
 
