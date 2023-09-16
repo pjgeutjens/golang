@@ -41,41 +41,34 @@ func main() {
 	fmt.Println(oxygen_generator_rating(readings))
 }
 
-func get_majority_bit(readings []string) ([]byte, error) {
+func get_majority_bit(readings []string, position int) (byte, error) {
 	if len(readings) == 0 {
-		return []byte{}, fmt.Errorf("empty readings")
+		return '0', fmt.Errorf("empty readings")
 	}
 
-	reading_length := len(readings[0])
-	var tally []int = make([]int, reading_length)
+	tally := 0
 	for i := 0; i < len(readings); i++ {
-		for j := 0; j < reading_length; j++ {
-			if readings[i][j] == '1' {
-				tally[j]++
-			}
+		if readings[i][position] == '1' {
+			tally++
 		}
 	}
-	result := make([]byte, reading_length)
-	for i := range tally {
-		if tally[i] < len(readings)/2 {
-			result[i] = '0'
-		} else {
-			result[i] = '1'
-		}
+	if tally < len(readings)/2 {
+		return '0', nil
+	} else {
+		return '1', nil
 	}
-	return result, nil
 }
 
 func oxygen_generator_rating(readings []string) string {
 	reading_length := len(readings[0])
 	for len(readings) > 1 {
 		for j := 0; j < reading_length; j++ {
+			keep, err := get_majority_bit(readings, j)
+			if err != nil {
+				return ""
+			}
 			for i := 0; i < len(readings); i++ {
-				keep, err := get_majority_bit(readings)
-				if err != nil {
-					return ""
-				}
-				if readings[i][j] != keep[j] {
+				for readings[i][j] != keep {
 					readings[i] = readings[len(readings)-1]
 					readings = readings[:len(readings)-1]
 				}
