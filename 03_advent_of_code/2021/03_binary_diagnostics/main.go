@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	readings, _ := read_from_file("/home/pgs/personal/golang/03_advent_of_code/2021/03_binary_diagnostics/hard.txt")
+	readings, _ := read_from_file("/home/pgs/personal/golang/03_advent_of_code/2021/03_binary_diagnostics/simple.txt")
 	// convert string to binary
 	fmt.Println(readings)
 	total_number_of_readings := len(readings)
@@ -37,6 +37,10 @@ func main() {
 	g, _ := strconv.ParseInt(gamma, 2, 64)
 	e, _ := strconv.ParseInt(epsilon, 2, 64)
 	fmt.Print(g * e)
+}
+
+func oxygen_generator_rating(readings []string, position int) string {
+	return "todo"
 }
 
 func read_from_file(filepath string) ([]string, error) {
