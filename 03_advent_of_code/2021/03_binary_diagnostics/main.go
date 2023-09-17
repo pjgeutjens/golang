@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	readings, _ := read_from_file("/home/pgs/personal/golang/03_advent_of_code/2021/03_binary_diagnostics/simple.txt")
+	readings, _ := read_from_file("/home/pgs/personal/golang/03_advent_of_code/2021/03_binary_diagnostics/hard.txt")
 	// convert string to binary
 	fmt.Println(readings)
 	total_number_of_readings := len(readings)
@@ -36,9 +36,32 @@ func main() {
 	}
 	g, _ := strconv.ParseInt(gamma, 2, 64)
 	e, _ := strconv.ParseInt(epsilon, 2, 64)
-	fmt.Print(g * e)
+	fmt.Println(g * e)
 
-	fmt.Println(oxygen_generator_rating(readings))
+	readings, _ = read_from_file("/home/pgs/personal/golang/03_advent_of_code/2021/03_binary_diagnostics/hard.txt")
+	ogr, _ := strconv.ParseInt(oxygen_generator_rating(readings), 2, 64)
+	readings, _ = read_from_file("/home/pgs/personal/golang/03_advent_of_code/2021/03_binary_diagnostics/hard.txt")
+	ss, _ := strconv.ParseInt(scrubber_rating(readings), 2, 64)
+	fmt.Println(ss * ogr)
+}
+
+func get_minority_bit(readings []string, position int) (byte, error) {
+	if len(readings) == 0 {
+		return '0', fmt.Errorf("empty readings")
+	}
+
+	tally := 0.0
+	for i := 0; i < len(readings); i++ {
+		if readings[i][position] == '1' {
+			tally++
+		}
+	}
+	mid := float64(len(readings)) / 2
+	if tally < mid {
+		return '1', nil
+	} else {
+		return '0', nil
+	}
 }
 
 func get_majority_bit(readings []string, position int) (byte, error) {
@@ -46,36 +69,61 @@ func get_majority_bit(readings []string, position int) (byte, error) {
 		return '0', fmt.Errorf("empty readings")
 	}
 
-	tally := 0
+	tally := 0.0
 	for i := 0; i < len(readings); i++ {
 		if readings[i][position] == '1' {
 			tally++
 		}
 	}
-	if tally < len(readings)/2 {
+	mid := float64(len(readings)) / 2
+	if tally < mid {
 		return '0', nil
 	} else {
 		return '1', nil
 	}
 }
 
-func oxygen_generator_rating(readings []string) string {
+func scrubber_rating(readings []string) string {
 	reading_length := len(readings[0])
 	for len(readings) > 1 {
+		for j := 0; j < reading_length; j++ {
+			keep, err := get_minority_bit(readings, j)
+			if err != nil {
+				return ""
+			}
+			for i := 0; i < len(readings); i++ {
+				for i < len(readings) && readings[i][j] != keep {
+					readings[i] = readings[len(readings)-1]
+					readings = readings[:len(readings)-1]
+					if len(readings) == 1 {
+						return readings[0]
+					}
+				}
+			}
+		}
+	}
+	return readings[0]
+}
+
+func oxygen_generator_rating(readings []string) string {
+	reading_length := len(readings[0])
+	for {
 		for j := 0; j < reading_length; j++ {
 			keep, err := get_majority_bit(readings, j)
 			if err != nil {
 				return ""
 			}
 			for i := 0; i < len(readings); i++ {
-				for readings[i][j] != keep {
+				for i < len(readings) && readings[i][j] != keep {
 					readings[i] = readings[len(readings)-1]
 					readings = readings[:len(readings)-1]
+					if len(readings) == 1 {
+						return readings[0]
+					}
 				}
 			}
 		}
 	}
-	return readings[0]
 }
 
 func read_from_file(filepath string) ([]string, error) {
