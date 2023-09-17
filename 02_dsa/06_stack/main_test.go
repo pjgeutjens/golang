@@ -5,11 +5,11 @@ import "testing"
 func TestStack(t *testing.T) {
 	s := Stack{}
 	_, err := s.Peek()
-	if err != nil {
+	if err == nil {
 		t.Errorf("expect peek on empty stack to return an error")
 	}
 	_, err = s.Pop()
-	if err != nil {
+	if err == nil {
 		t.Errorf("expect pop on empty stack to return an error")
 	}
 	s.Push(5)
