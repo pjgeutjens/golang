@@ -44,6 +44,8 @@ use ./02_dsa/04_linked_list
 
 use ./02_dsa/05_double_linked_list
 
+use ./02_dsa/06_stack
+
 use ./03_advent_of_code/2021/01_sonar_sweep
 
 use ./03_advent_of_code/2021/02_dive

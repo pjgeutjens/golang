@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"reflect"
 	"strconv"
 )
 
@@ -39,9 +40,9 @@ func main() {
 	fmt.Println(g * e)
 
 	readings, _ = read_from_file("/home/pgs/personal/golang/03_advent_of_code/2021/03_binary_diagnostics/hard.txt")
-	ogr, _ := strconv.ParseInt(oxygen_generator_rating(readings), 2, 64)
+	ogr, _ := strconv.ParseInt(get_rating(readings, get_majority_bit), 2, 64)
 	readings, _ = read_from_file("/home/pgs/personal/golang/03_advent_of_code/2021/03_binary_diagnostics/hard.txt")
-	ss, _ := strconv.ParseInt(scrubber_rating(readings), 2, 64)
+	ss, _ := strconv.ParseInt(get_rating(readings, get_minority_bit), 2, 64)
 	fmt.Println(ss * ogr)
 }
 
@@ -83,14 +84,18 @@ func get_majority_bit(readings []string, position int) (byte, error) {
 	}
 }
 
-func scrubber_rating(readings []string) string {
+func get_rating(readings []string, callback interface{}) string {
+	v := reflect.ValueOf(callback)
+	if v.Kind() != reflect.Func {
+		panic("callback is not a function")
+	}
+	vargs := make([]reflect.Value, 2)
 	reading_length := len(readings[0])
 	for len(readings) > 1 {
 		for j := 0; j < reading_length; j++ {
-			keep, err := get_minority_bit(readings, j)
-			if err != nil {
-				return ""
-			}
+			vargs[0] = reflect.ValueOf(readings)
+			vargs[1] = reflect.ValueOf(j)
+			keep := v.Call(vargs)[0].Interface().(byte)
 			for i := 0; i < len(readings); i++ {
 				for i < len(readings) && readings[i][j] != keep {
 					readings[i] = readings[len(readings)-1]
@@ -103,27 +108,6 @@ func scrubber_rating(readings []string) string {
 		}
 	}
 	return readings[0]
-}
-
-func oxygen_generator_rating(readings []string) string {
-	reading_length := len(readings[0])
-	for {
-		for j := 0; j < reading_length; j++ {
-			keep, err := get_majority_bit(readings, j)
-			if err != nil {
-				return ""
-			}
-			for i := 0; i < len(readings); i++ {
-				for i < len(readings) && readings[i][j] != keep {
-					readings[i] = readings[len(readings)-1]
-					readings = readings[:len(readings)-1]
-					if len(readings) == 1 {
-						return readings[0]
-					}
-				}
-			}
-		}
-	}
 }
 
 func read_from_file(filepath string) ([]string, error) {
