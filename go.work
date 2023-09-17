@@ -53,3 +53,5 @@ use ./03_advent_of_code/2021/01_sonar_sweep
 use ./03_advent_of_code/2021/02_dive
 
 use ./03_advent_of_code/2021/03_binary_diagnostics
+
+use ./03_advent_of_code/2021/04_giant_squid
