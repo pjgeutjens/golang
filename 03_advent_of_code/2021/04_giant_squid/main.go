@@ -1,6 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 type Board [][]int
 
@@ -48,7 +54,55 @@ func (b *Board) Score(drawn int) int {
 	return sum * drawn
 }
 
+func read_from_file(filepath string, g *Game) error {
+	file, err := os.Open(filepath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// var readings []string
+	scanner := bufio.NewScanner(file)
+	// first line contains the draws
+	err = read_draws_from_file(scanner, g)
+	if err != nil {
+		return err
+	}
+	err = read_boards_from_file(scanner, g)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func read_boards_from_file(scanner *bufio.Scanner, g *Game) error {
+	for scanner.Scan() {
+		read_board(g)
+	}
+	return nil
+}
+
+func read_board(g *Game) {
+	panic("unimplemented")
+}
+
+func read_draws_from_file(scanner *bufio.Scanner, g *Game) error {
+	scanner.Scan()
+	drawstrings := strings.Split(scanner.Text(), ",")
+	var draws []int
+	for _, d := range drawstrings {
+		v, err := strconv.Atoi(d)
+		if err != nil {
+			return err
+		}
+		draws = append(draws, v)
+	}
+	g.draws = draws
+	return nil
+}
+
 func main() {
-	b := Board{}
-	b.Print()
+	g := &Game{}
+	read_from_file("./simple.txt", g)
+	fmt.Print(g.draws)
 }
