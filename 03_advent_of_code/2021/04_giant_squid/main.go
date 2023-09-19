@@ -27,6 +27,7 @@ func (b Board) Print() {
 	for i := 0; i < len(b); i++ {
 		fmt.Println(b[i])
 	}
+	fmt.Println()
 }
 
 func (b *Board) Mark(drawn int) int {
@@ -40,6 +41,10 @@ func (b *Board) Mark(drawn int) int {
 		}
 	}
 	return count
+}
+
+func (b *Board) AddRow(row []int) {
+	*b = append(*b, row)
 }
 
 func (b *Board) Score(drawn int) int {
@@ -77,13 +82,28 @@ func read_from_file(filepath string, g *Game) error {
 
 func read_boards_from_file(scanner *bufio.Scanner, g *Game) error {
 	for scanner.Scan() {
-		read_board(g)
+		read_board(scanner, g, 5)
 	}
 	return nil
 }
 
-func read_board(g *Game) {
-	panic("unimplemented")
+func read_board(scanner *bufio.Scanner, g *Game, size int) {
+	board := Board{}
+	for i := 0; i < size; i++ {
+		scanner.Scan()
+		line := strings.Fields(scanner.Text())
+		if len(line) == 0 {
+			i--
+			break
+		}
+		var row []int
+		for _, v := range line {
+			n, _ := strconv.Atoi(v)
+			row = append(row, n)
+		}
+		board.AddRow(row)
+	}
+	g.boards = append(g.boards, board)
 }
 
 func read_draws_from_file(scanner *bufio.Scanner, g *Game) error {
@@ -105,4 +125,8 @@ func main() {
 	g := &Game{}
 	read_from_file("./simple.txt", g)
 	fmt.Print(g.draws)
+	fmt.Println()
+	for _, b := range g.boards {
+		b.Print()
+	}
 }
