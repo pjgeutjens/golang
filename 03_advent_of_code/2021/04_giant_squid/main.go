@@ -23,6 +23,25 @@ func (g *Game) Mark(drawn int) int {
 	return sum
 }
 
+func (g *Game) Play() {
+	done := false
+	for _, d := range g.draws {
+		if done {
+			break
+		}
+		fmt.Println("Draw:", d)
+		g.Mark(d)
+		for _, b := range g.boards {
+			if b.isBingo() {
+				b.Print()
+				fmt.Println("Bingo!")
+				fmt.Println(b.Score(d))
+				done = true
+			}
+		}
+	}
+}
+
 func (b Board) Print() {
 	for i := 0; i < len(b); i++ {
 		fmt.Println(b[i])
@@ -41,6 +60,46 @@ func (b *Board) Mark(drawn int) int {
 		}
 	}
 	return count
+}
+
+func (b Board) isBingo() bool {
+	return b.isRowBingo() || b.isColumnBingo()
+}
+
+func (b Board) isRowBingo() bool {
+	for i := 0; i < len(b); i++ {
+		if b.isRowFull(i) {
+			return true
+		}
+	}
+	return false
+}
+
+func (b Board) isColumnBingo() bool {
+	for i := 0; i < len(b); i++ {
+		if b.isColumnFull(i) {
+			return true
+		}
+	}
+	return false
+}
+
+func (b Board) isRowFull(row int) bool {
+	for i := 0; i < len(b); i++ {
+		if b[row][i] != -1 {
+			return false
+		}
+	}
+	return true
+}
+
+func (b Board) isColumnFull(col int) bool {
+	for i := 0; i < len(b); i++ {
+		if b[i][col] != -1 {
+			return false
+		}
+	}
+	return true
 }
 
 func (b *Board) AddRow(row []int) {
@@ -123,10 +182,11 @@ func read_draws_from_file(scanner *bufio.Scanner, g *Game) error {
 
 func main() {
 	g := &Game{}
-	read_from_file("./simple.txt", g)
+	read_from_file("./hard.txt", g)
 	fmt.Print(g.draws)
 	fmt.Println()
 	for _, b := range g.boards {
 		b.Print()
 	}
+	g.Play()
 }
