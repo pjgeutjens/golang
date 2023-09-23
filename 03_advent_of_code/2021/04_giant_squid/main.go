@@ -13,6 +13,17 @@ type Board [][]int
 type Game struct {
 	boards []Board
 	draws  []int
+	wins   []bool
+}
+
+func (g Game) BoardsRemaining() int {
+	counter := 1
+	for _, w := range g.wins {
+		if !w {
+			counter++
+		}
+	}
+	return counter
 }
 
 func (g *Game) Mark(drawn int) int {
@@ -31,11 +42,14 @@ func (g *Game) Play() {
 		}
 		fmt.Println("Draw:", d)
 		g.Mark(d)
-		for _, b := range g.boards {
-			if b.isBingo() {
+		for i, b := range g.boards {
+			if b.isBingo() && !g.wins[i] {
 				b.Print()
-				fmt.Println("Bingo!")
+				fmt.Printf("Bingo! on %d, %d boards remaining\n", i, g.BoardsRemaining())
 				fmt.Println(b.Score(d))
+				g.wins[i] = true
+			}
+			if g.BoardsRemaining() == 0 {
 				done = true
 			}
 		}
@@ -163,6 +177,7 @@ func read_board(scanner *bufio.Scanner, g *Game, size int) {
 		board.AddRow(row)
 	}
 	g.boards = append(g.boards, board)
+	g.wins = append(g.wins, false)
 }
 
 func read_draws_from_file(scanner *bufio.Scanner, g *Game) error {
