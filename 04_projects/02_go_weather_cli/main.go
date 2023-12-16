@@ -43,7 +43,17 @@ func main() {
 		q = os.Args[1]
 	}
 
-	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=71eb6de696d04055ab490157231612&q=" + q + "&days=1&aqi=no&alerts=no")
+	key := ""
+	if len(os.Args) > 2 {
+		key = os.Args[2]
+	} else {
+		key = os.Getenv("WEATHER_API_KEY")
+	}
+	if key == "" {
+		panic("WEATHER_API_KEY not set")
+	}
+
+	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=" + key + "&q=" + q + "&days=1&aqi=no&alerts=no")
 	if err != nil {
 		panic(err)
 	}
