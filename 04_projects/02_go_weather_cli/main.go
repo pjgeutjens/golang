@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -39,21 +40,18 @@ type Weather struct {
 func main() {
 	q := "Leuven"
 
-	if len(os.Args) > 1 {
-		q = os.Args[1]
+	if len(flag.Args()) > 1 {
+		q = flag.Args()[0]
 	}
 
-	key := ""
-	if len(os.Args) > 2 {
-		key = os.Args[2]
-	} else {
-		key = os.Getenv("WEATHER_API_KEY")
-	}
-	if key == "" {
+	keyPtr := flag.String("key", os.Getenv("WEATHER_API_KEY"), "Weather API key")
+	flag.Parse()
+
+	if *keyPtr == "" {
 		panic("WEATHER_API_KEY not set")
 	}
 
-	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=" + key + "&q=" + q + "&days=1&aqi=no&alerts=no")
+	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=" + *keyPtr + "&q=" + q + "&days=1&aqi=no&alerts=no")
 	if err != nil {
 		panic(err)
 	}
