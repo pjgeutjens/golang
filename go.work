@@ -55,3 +55,11 @@ use ./03_advent_of_code/2021/02_dive
 use ./03_advent_of_code/2021/03_binary_diagnostics
 
 use ./03_advent_of_code/2021/04_giant_squid
+
+use ./03_advent_of_code/2021/05_hydrothermal_venture
+
+use ./03_advent_of_code/2023/01_trebuchet
+
+use ./04_projects/01_go_cobra_cli
+
+use ./04_projects/02_go_weather_cli
